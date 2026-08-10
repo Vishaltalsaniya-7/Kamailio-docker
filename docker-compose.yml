@@ -1,0 +1,31 @@
+services:
+
+  kamailio:
+    build:
+      context: .
+      args:
+        KAMAILIO_VERSION: ${KAMAILIO_VERSION:-5.6}
+
+    container_name: kamailio
+
+    restart: unless-stopped
+    network_mode: host
+
+    environment:
+      KAMAILIO_VERSION: ${KAMAILIO_VERSION:-5.6}
+
+      DBHOST: host.docker.internal
+      DBPORT: 5432
+      DBNAME: kamailio
+      DBRWUSER: kamailio
+      DBRWPW: kamailiorw
+
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+#    ports:
+#      - "5060:5060/udp"
+#      - "5060:5060/tcp"
+
+    volumes:
+      - ./config/:/usr/local/etc/kamailio/
